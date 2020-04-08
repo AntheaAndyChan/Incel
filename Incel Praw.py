@@ -14,19 +14,8 @@ reddit=praw.Reddit(client_id= 'AHg4WHV1FIjPig',
                    password= 'Greta-Andy-Kaylee2020',
                    user_agent= 'Incel Research')
 
-#Establish the subreddit
-incel_sub=reddit.subreddit('IncelExit')
-
-#Basic subreddit info
-filename='C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\' + str(incel_sub) + '.txt'
-File_object = open(filename,"w+")
-L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
-File_object.writelines(L)
-File_object.close()
-
-
 def get_hot_posts(sub):
-    return  sub.hot(limit=10)
+    return  sub.hot(limit=100)
 
 def write_post_info(post, file_object):
     out = {
@@ -36,7 +25,7 @@ def write_post_info(post, file_object):
         'Post Downvotes': post.downs,
         'Post Body': post.selftext
         } 
-    file_object.writelines(json.dumps(out, ensure_ascii=False, indent=4))
+    file_object.writelines(json.dumps(out, indent=4))
     file_object.writelines((100 * '-'))
    
 def write_comment_info(comment, file_object):
@@ -48,18 +37,48 @@ def write_comment_info(comment, file_object):
     file_object.writelines(json.dumps(c_out,  indent=4))
     file_object.writelines((20 * '-'))
      
+def savehotsubreddit(subreddit):   
+    incel_sub=reddit.subreddit(subreddit)
     
-hot_posts = get_hot_posts(incel_sub)
-    
-for post in hot_posts:
-    post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Submissions\\{post.id}.txt'
-    post_file = open(post_path, "w+") 
-    write_post_info(post, post_file)
-     
-    post.comments.replace_more(limit=None)
-    comments = post.comments.list()
-    for comment in comments:
-        write_comment_info(comment, post_file)
-    post_file.close()
+    #Basic subreddit info
+    filename=f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{subreddit}.txt'
+    File_object = open(filename,"w+")
+    L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
+    File_object.writelines(L)
+    File_object.close()
+
+    #posts n comments
+    hot_posts = get_hot_posts(incel_sub) 
+    for post in hot_posts:
+        post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{post.id}.txt'
+        post_file = open(post_path, "w+") 
+        write_post_info(post, post_file)
+         
+        post.comments.replace_more(limit=None)
+        comments = post.comments.list()
+        for comment in comments:
+            write_comment_info(comment, post_file)
+        post_file.close()
  
- 
+# shortcel
+#savehotsubreddit('shortcels')
+        #banned
+# ricecels
+savehotsubreddit('ricecels') 
+# hapacels 
+savehotsubreddit('hapacels') 
+# IncelExit
+savehotsubreddit('IncelExit') 
+# inceltears
+savehotsubreddit('inceltears') 
+# IncelswithoutHate
+savehotsubreddit('IncelswithoutHate') 
+# IncelsInAction
+savehotsubreddit('IncelsInAction') 
+# TruFemCels
+savehotsubreddit('TruFemCels') 
+# AskTruFemCels
+savehotsubreddit('AskTruFemCels') 
+# IntelligentCels 
+#savehotsubreddit('IntelligentCels') 
+    #banned
