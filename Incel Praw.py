@@ -26,7 +26,6 @@ def write_post_info(post, file_object):
         'Post Body': post.selftext
         } 
     file_object.writelines(json.dumps(out, indent=4))
-    file_object.writelines((100 * '-'))
    
 def write_comment_info(comment, file_object):
     c_out = {
@@ -35,7 +34,6 @@ def write_comment_info(comment, file_object):
         'Comment Body: ': comment.body
         } 
     file_object.writelines(json.dumps(c_out,  indent=4))
-    file_object.writelines((20 * '-'))
      
 def savehotsubreddit(subreddit):   
     incel_sub=reddit.subreddit(subreddit)
@@ -60,9 +58,7 @@ def savehotsubreddit(subreddit):
             write_comment_info(comment, post_file)
         post_file.close()
  
-# shortcel
-#savehotsubreddit('shortcels')
-        #banned
+# shortcel  #banned        
 # ricecels
 savehotsubreddit('ricecels') 
 # hapacels 
@@ -79,6 +75,4 @@ savehotsubreddit('IncelsInAction')
 savehotsubreddit('TruFemCels') 
 # AskTruFemCels
 savehotsubreddit('AskTruFemCels') 
-# IntelligentCels 
-#savehotsubreddit('IntelligentCels') 
-    #banned
+# IntelligentCels   #banned 
