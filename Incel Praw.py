@@ -5,6 +5,7 @@ Created on Tue Apr  7 11:59:46 2020
 @author: Chan234
 """
 import praw
+import json
 
 #setup reddit instance
 reddit=praw.Reddit(client_id= 'AHg4WHV1FIjPig',
@@ -23,37 +24,44 @@ L=["Subreddit Title:", str(incelexit_sub),"\n",incelexit_sub.description]
 File_object.writelines(L)
 File_object.close()
 
-# hottest posts
-hot_IncelExit = incelexit_sub.hot(limit=100)
-for submission in hot_IncelExit:
-    filename = 'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Posts\\' + submission.id + '.txt'
-    File_object = open(filename, "w+")
-    L = [(100 * '-'), "\n",
-         str(filename), "\n",
-         'Post Title: ', str(submission.title), "\n",
-         'Post ID: ', str(submission.id), "\n",
-         'Ups: ', str(submission.ups), "\n",
-         'Downs: ', str(submission.downs), "\n",
-         'Body: ', str(submission.selftext), "\n"]
 
-    File_object.writelines(L)
-    File_object.close()
+def get_hot_posts(sub):
+    return  sub.hot(limit=1000)
+
+def write_post_info(post, file_object):
+    out = {
+        'Post Title': post.title,
+        'Post ID': post.id,
+        'Post Upvotes': post.ups,
+        'Post Downvotes': post.downs,
+        'Post Body': post.selftext
+        } 
+    file_object.writelines(json.dumps(out, ensure_ascii=False, indent=4))
+    
+   
+def write_comment_info(comment, file_object):
+    c_out = {
+        'Parent ID: ': str(comment.parent()), #parents can be the submission, or the comment
+        'Comment ID: ': comment.id,
+        'Comment Body: ': comment.body
+        } 
+    file_object.writelines(json.dumps(c_out,  indent=4))
      
+    
+hot_posts = get_hot_posts(incelexit_sub)
 
-hot_IncelExit = incelexit_sub.hot(limit=100)
-for submission in hot_IncelExit:
-    submission.comments.replace_more(limit=None)
-    comments = submission.comments.list()
-    comment_filename = 'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Comments\\' + submission.id + '_comments.txt'
-    comment_File_object = open(comment_filename,"w+")
-    L_comments=[]
+for post in hot_posts:
+    post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Posts\\{post.id}.txt'
+    post_file = open(post_path, "w+")  
+    post.comments.replace_more(limit=None)
+    comments = post.comments.list()
+    write_post_info(post, post_file)
+    post_file.close()
+    
+    comment_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Comments\\{post.id}.txt'
+    comment_file = open(comment_path, "w+")
     for comment in comments:
-        L_comments.append([(20*'-'), "\n",
-        'Post ID: ', str(submission.id), "\n",
-        'Parent ID: ', str(comment.parent()), "\n", #parents can be the submission, or the comment
-        'Comment ID: ', str(comment.id), "\n",
-        'Body: ', str(comment.body), "\n"])
-    print(L_comments)
-    comment_File_object.writelines(L_comments)
-    comment_File_object.close()
+        write_comment_info(comment, comment_file)
+    comment_file.close()
+ 
  
