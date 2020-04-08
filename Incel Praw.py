@@ -15,18 +15,18 @@ reddit=praw.Reddit(client_id= 'AHg4WHV1FIjPig',
                    user_agent= 'Incel Research')
 
 #Establish the subreddit
-incelexit_sub=reddit.subreddit('IncelExit')
+incel_sub=reddit.subreddit('IncelExit')
 
 #Basic subreddit info
-filename='C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\' + str(incelexit_sub) + '.txt'
+filename='C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\' + str(incel_sub) + '.txt'
 File_object = open(filename,"w+")
-L=["Subreddit Title:", str(incelexit_sub),"\n",incelexit_sub.description]
+L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
 File_object.writelines(L)
 File_object.close()
 
 
 def get_hot_posts(sub):
-    return  sub.hot(limit=1000)
+    return  sub.hot(limit=10)
 
 def write_post_info(post, file_object):
     out = {
@@ -37,7 +37,7 @@ def write_post_info(post, file_object):
         'Post Body': post.selftext
         } 
     file_object.writelines(json.dumps(out, ensure_ascii=False, indent=4))
-    
+    file_object.writelines((100 * '-'))
    
 def write_comment_info(comment, file_object):
     c_out = {
@@ -46,22 +46,20 @@ def write_comment_info(comment, file_object):
         'Comment Body: ': comment.body
         } 
     file_object.writelines(json.dumps(c_out,  indent=4))
+    file_object.writelines((20 * '-'))
      
     
-hot_posts = get_hot_posts(incelexit_sub)
-
+hot_posts = get_hot_posts(incel_sub)
+    
 for post in hot_posts:
-    post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Posts\\{post.id}.txt'
-    post_file = open(post_path, "w+")  
+    post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Submissions\\{post.id}.txt'
+    post_file = open(post_path, "w+") 
+    write_post_info(post, post_file)
+     
     post.comments.replace_more(limit=None)
     comments = post.comments.list()
-    write_post_info(post, post_file)
-    post_file.close()
-    
-    comment_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\IncelExit\\Comments\\{post.id}.txt'
-    comment_file = open(comment_path, "w+")
     for comment in comments:
-        write_comment_info(comment, comment_file)
-    comment_file.close()
+        write_comment_info(comment, post_file)
+    post_file.close()
  
  
