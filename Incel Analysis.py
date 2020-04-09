@@ -15,35 +15,59 @@ def parsethru(folder):
     bodies=[]
     comments=[]
     for filename in os.listdir(directory):
-        #print (filename)
         f = open(directory+filename,"r")
         lines = f.read()
-        #print(lines)
         post_dict=json.loads(lines)
         
-        #append Post Title to titles (1 per post)
-        #titles = [post['Post Title'] for post in post_dict]
         titles.append(str(post_dict['Post Title']))
-        #print(post_dict['Post Title'])
-        
-        #append Post Bodies to bodies (1 per post)
-        #bodies = [post['Post Body'] for post in post_dict]
         bodies.append(str(post_dict['Post Body']))
-        #print(post_dict['Post Body'])
         
-        #append Post Comment to comments (many per post)
         for comment in post_dict['Comments']:
             comments.append(str(comment['Comment Body']))
-        #comments.append([post['Comments'] for post in post_dict])
-            
     return titles, bodies, comments
     
-    
-titles, bodies, comments = parsethru('hapacels')  
-print("Titles: ", titles, "\n") 
-print("Bodies: ", bodies, "\n") 
-print("Comments: ",comments, "\n")
 
+subreddits= ['ricecels','hapacels','IncelExit','inceltears','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
+title_dict={}
+bodies_dict={}
+comments_dict={}
+for subreddit in subreddits:
+    titles, bodies, comments = parsethru(subreddit)  
+    title_dict[subreddit]= titles
+    bodies_dict[subreddit]= bodies
+    comments_dict[subreddit]= comments
+ 
+print(title_dict)
+print(bodies_dict)
+print(comments_dict)
+# # Apply a first round of text cleaning techniques
+# import re
+# import string
+
+# def clean_text_round1(text):
+#     '''Make text lowercase, remove text in square brackets, remove punctuation and remove words containing numbers.'''
+#     text = text.lower()
+#     #text = re.sub('\[.*?\]', '', text)
+#     text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+#     text = re.sub('\w*\d\w*', '', text)
+#     text = re.sub('[‘’“”…]', '', text)
+#     text = re.sub('\n', ' ', text)
+#     return text
+
+# # round1 = lambda x: clean_text_round1(x)
+# # data_clean = pd.DataFrame(data_df.transcript.apply(round1))
+# # data_clean
+# for value in dict:
+#     data_clean=clean_text_round1(value)
+
+# #the count
+# from sklearn.feature_extraction.text import CountVectorizer
+
+# cv = CountVectorizer(stop_words='english')
+# data_cv = cv.fit_transform(data_clean.transcript)
+# data_dtm = pd.DataFrame(data_cv.toarray(), columns=cv.get_feature_names())
+# data_dtm.index = data_clean.index
+# data_dtm
 
 #sentiment analysis comparing incelswithouthate to incelexit
 #word counts

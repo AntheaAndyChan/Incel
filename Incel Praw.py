@@ -7,7 +7,6 @@ Created on Tue Apr  7 11:59:46 2020
 import praw
 import json
 
-#setup reddit instance
 reddit=praw.Reddit(client_id= 'AHg4WHV1FIjPig',
                    client_secret= 'pi7ttIzSPGcOt8B4VUtLYvkA8fg',
                    username= 'AndyResearch',
@@ -26,8 +25,7 @@ def jsonify_post(post, file_object):
         'Post Body': post.selftext
         } 
     return post_json
-    #file_object.writelines(', ')
-   
+
 def jsonify_comment(comment, file_object):
     c_out = {
         'Parent ID': str(comment.parent()), #parents can be the submission, or the comment
@@ -39,14 +37,6 @@ def jsonify_comment(comment, file_object):
 def savehotsubreddit(subreddit):   
     incel_sub=reddit.subreddit(subreddit)
     
-    # #Basic subreddit info
-    # filename=f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{subreddit}.txt'
-    # File_object = open(filename,"w+")
-    # L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
-    # File_object.writelines(L)
-    # File_object.close()
-
-    #posts n comments
     hot_posts = get_hot_posts(incel_sub) 
     for post in hot_posts:
         post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{post.id}.txt'
@@ -62,21 +52,6 @@ def savehotsubreddit(subreddit):
         post_file.writelines(json.dumps(post_json,  indent=4))
         post_file.close()
  
-# shortcel  #banned        
-# ricecels
-#savehotsubreddit('ricecels') 
-# hapacels 
-savehotsubreddit('hapacels') 
-# IncelExit
-# savehotsubreddit('IncelExit') 
-# # inceltears
-# savehotsubreddit('inceltears') 
-# # IncelswithoutHate
-# savehotsubreddit('IncelswithoutHate') 
-# # IncelsInAction
-# savehotsubreddit('IncelsInAction') 
-# # TruFemCels
-# savehotsubreddit('TruFemCels') 
-# # AskTruFemCels
-# savehotsubreddit('AskTruFemCels') 
-# IntelligentCels   #banned 
+subreddits= ['ricecels','hapacels','IncelExit','inceltears','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
+for sub in subreddits:
+    savehotsubreddit(sub)
