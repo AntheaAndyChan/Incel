@@ -39,12 +39,12 @@ def jsonify_comment(comment, file_object):
 def savehotsubreddit(subreddit):   
     incel_sub=reddit.subreddit(subreddit)
     
-    #Basic subreddit info
-    filename=f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{subreddit}.txt'
-    File_object = open(filename,"w+")
-    L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
-    File_object.writelines(L)
-    File_object.close()
+    # #Basic subreddit info
+    # filename=f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{subreddit}.txt'
+    # File_object = open(filename,"w+")
+    # L=["Subreddit Title:", str(incel_sub),"\n",incel_sub.description]
+    # File_object.writelines(L)
+    # File_object.close()
 
     #posts n comments
     hot_posts = get_hot_posts(incel_sub) 

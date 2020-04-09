@@ -7,7 +7,7 @@ Created on Wed Apr  8 15:39:20 2020
 
 import json
 import os 
-import pdb
+#import pdb
 
 def parsethru(folder):
     directory=f"C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{folder}\\"
@@ -18,6 +18,7 @@ def parsethru(folder):
         #print (filename)
         f = open(directory+filename,"r")
         lines = f.read()
+        #print(lines)
         post_dict=json.loads(lines)
         
         #append Post Title to titles (1 per post)
@@ -32,13 +33,16 @@ def parsethru(folder):
         
         #append Post Comment to comments (many per post)
         for comment in post_dict['Comments']:
-            comments.append(str(post_dict['Comments']))
+            comments.append(str(comment['Comment Body']))
         #comments.append([post['Comments'] for post in post_dict])
-        continue   
-parsethru('hapacels')  
-print("Titles: ",titles) 
-print("Bodies: ",bodies) 
-print("Comments: ",comments)
+            
+    return titles, bodies, comments
+    
+    
+titles, bodies, comments = parsethru('hapacels')  
+print("Titles: ", titles, "\n") 
+print("Bodies: ", bodies, "\n") 
+print("Comments: ",comments, "\n")
 
 
 #sentiment analysis comparing incelswithouthate to incelexit
