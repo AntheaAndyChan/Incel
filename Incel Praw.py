@@ -17,23 +17,24 @@ reddit=praw.Reddit(client_id= 'AHg4WHV1FIjPig',
 def get_hot_posts(sub):
     return  sub.hot(limit=100)
 
-def write_post_info(post, file_object):
-    out = {
+def jsonify_post(post, file_object):
+    post_json = {
         'Post Title': post.title,
         'Post ID': post.id,
         'Post Upvotes': post.ups,
         'Post Downvotes': post.downs,
         'Post Body': post.selftext
         } 
-    file_object.writelines(json.dumps(out, indent=4))
+    return post_json
+    #file_object.writelines(', ')
    
-def write_comment_info(comment, file_object):
+def jsonify_comment(comment, file_object):
     c_out = {
-        'Parent ID: ': str(comment.parent()), #parents can be the submission, or the comment
-        'Comment ID: ': comment.id,
-        'Comment Body: ': comment.body
+        'Parent ID': str(comment.parent()), #parents can be the submission, or the comment
+        'Comment ID': comment.id,
+        'Comment Body': comment.body
         } 
-    file_object.writelines(json.dumps(c_out,  indent=4))
+    return c_out
      
 def savehotsubreddit(subreddit):   
     incel_sub=reddit.subreddit(subreddit)
@@ -50,29 +51,32 @@ def savehotsubreddit(subreddit):
     for post in hot_posts:
         post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{post.id}.txt'
         post_file = open(post_path, "w+") 
-        write_post_info(post, post_file)
+        post_json = jsonify_post(post, post_file)
          
         post.comments.replace_more(limit=None)
         comments = post.comments.list()
+        comment_json = []
         for comment in comments:
-            write_comment_info(comment, post_file)
+            comment_json.append(jsonify_comment(comment, post_file))
+        post_json['Comments'] = comment_json
+        post_file.writelines(json.dumps(post_json,  indent=4))
         post_file.close()
  
 # shortcel  #banned        
 # ricecels
-savehotsubreddit('ricecels') 
+#savehotsubreddit('ricecels') 
 # hapacels 
 savehotsubreddit('hapacels') 
 # IncelExit
-savehotsubreddit('IncelExit') 
-# inceltears
-savehotsubreddit('inceltears') 
-# IncelswithoutHate
-savehotsubreddit('IncelswithoutHate') 
-# IncelsInAction
-savehotsubreddit('IncelsInAction') 
-# TruFemCels
-savehotsubreddit('TruFemCels') 
-# AskTruFemCels
-savehotsubreddit('AskTruFemCels') 
+# savehotsubreddit('IncelExit') 
+# # inceltears
+# savehotsubreddit('inceltears') 
+# # IncelswithoutHate
+# savehotsubreddit('IncelswithoutHate') 
+# # IncelsInAction
+# savehotsubreddit('IncelsInAction') 
+# # TruFemCels
+# savehotsubreddit('TruFemCels') 
+# # AskTruFemCels
+# savehotsubreddit('AskTruFemCels') 
 # IntelligentCels   #banned 
