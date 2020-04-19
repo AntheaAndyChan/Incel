@@ -39,7 +39,7 @@ def savehotsubreddit(subreddit):
     
     hot_posts = get_hot_posts(incel_sub) 
     for post in hot_posts:
-        post_path = f'C:\\Users\\Chan234\\Documents\\Personal Research\\Incels\\Scraping\\{subreddit}\\{post.id}.txt'
+        post_path = f'E:\\Work\\Incels\\Scraping\\{subreddit}\\{post.id}.txt'
         post_file = open(post_path, "w+") 
         post_json = jsonify_post(post, post_file)
          
@@ -47,11 +47,16 @@ def savehotsubreddit(subreddit):
         comments = post.comments.list()
         comment_json = []
         for comment in comments:
-            comment_json.append(jsonify_comment(comment, post_file))
+            #check if comment contains bots 
+            bot1= "I'm a bot"
+            bot2= "^^I'm ^^a ^^bot"
+            com=comment.body
+            if bot1 not in com and bot2 not in com:
+                comment_json.append(jsonify_comment(comment, post_file))
         post_json['Comments'] = comment_json
         post_file.writelines(json.dumps(post_json,  indent=4))
         post_file.close()
  
-subreddits= ['ricecels','hapacels','IncelExit','inceltears','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
+subreddits= ['ricecels','hapacels','IncelExit','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
 for sub in subreddits:
     savehotsubreddit(sub)
