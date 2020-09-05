@@ -13,7 +13,7 @@ import string
 #import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
-#from nltk.stem.porter import PorterStemmer
+from nltk.stem.porter import PorterStemmer
 
 
 #this function parses each file(post) in each folder(subreddit)
@@ -36,8 +36,8 @@ def parsethru(folder):
             comments.append(str(comment['Comment Body']))
     return titles, bodies, comments
     
-#subreddits= ['hapacels']
-subreddits= ['ricecels','hapacels','IncelExit','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
+subreddits= ['IncelExit']
+#subreddits= ['ricecels','hapacels','IncelExit','IncelswithoutHate','IncelsInAction','TruFemCels','AskTruFemCels']
 title_dict={}
 bodies_dict={}
 comments_dict={}
@@ -67,8 +67,11 @@ stop_words.append('youre')
 stop_words.append('cant')
 stop_words.append('also')
 stop_words.append('didnt')
+stop_words.append('dont')
 stop_words.append('got')
 stop_words.append('really')
+stop_words.append('thats')
+stop_words.append('even')
 
 #Make text lowercase, remove punctuation and remove words containing numbers.
 # remove remaining tokens that are not alphabetic
@@ -83,8 +86,8 @@ def clean_text_round1(text):
     words = [word for word in tokens if word.isalpha()]
     words = [w for w in words if not w in stop_words]
     # convert words to stems
-    #porter = PorterStemmer()
-    #words = [porter.stem(word) for word in words]
+    porter = PorterStemmer()
+    words = [porter.stem(word) for word in words]
     return words
   
 def listToString(s):  
