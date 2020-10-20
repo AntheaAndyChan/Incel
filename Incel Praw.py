@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr  7 11:59:46 2020
+Created on Tue Apr 7 11:59:46 2020
 
 @author: Chan234
 """
@@ -27,7 +27,7 @@ redditor = []
 i=0
 
 
-for submission in subreddit.top(limit=1000):
+for submission in subreddit.top(limit=10000):
     i+=1
     submission_title.append(submission.title)
     submission_ID.append(submission.id)
@@ -37,7 +37,7 @@ for submission in subreddit.top(limit=1000):
     num_comments.append(submission.num_comments)
     link.append(submission.permalink)
     redditor.append(submission.author) 
-    if i%5 == 0:
+    if i%10 == 0:
         print(f'{i} submissions completed')
     
 posts_df = pd.DataFrame(
@@ -68,7 +68,7 @@ subs=0
 bot1= "I'm a bot"
 bot2= "^^I'm ^^a ^^bot" 
 
-for submission in subreddit.top(limit=1000):
+for submission in subreddit.top(limit=10000):
     subs+=1
     submission.comments.replace_more(limit=None)
     for comment in submission.comments.list(): 
@@ -84,7 +84,7 @@ for submission in subreddit.top(limit=1000):
             ups.append(comment.ups)
             link.append(submission.permalink)
             time.append(comment.created_utc)
-    if subs%5 == 0:
+    if subs%10 == 0:
         print(f'{subs} submissions comments completed')
     
         
@@ -107,7 +107,7 @@ comments_df.head(10)
 #merge comments and post dfs, sort by submission ID then parent ID then comment ID, then export to csv
 all_content = [posts_df, comments_df]
 result = pd.concat(all_content)
-result.to_csv (r'E:\Work\Incels\Scrape_August 2020\IncelExit.csv', index = False, header=True)
+result.to_csv (r'C:\Users\anthe\Documents\GitHub\Incel\IncelExit_Octobermore.csv', index = False, header=True)
 
 #When we want to start investigating prolific posters, 
 #check out this link: https://praw.readthedocs.io/en/latest/code_overview/models/redditor.html
